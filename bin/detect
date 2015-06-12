@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+mix_file_url="$1/mix.exs"
+brunch_file_url="$1/brunch-config.js"
+
+if [ -f $mix_file_url ] && [ -f $brunch_file_url ];
+then
+  echo "Phoenix"
+  exit 0
+else
+  exit 1
+fi

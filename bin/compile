@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Ensure dirs are present
+mkdir -p $1 $2 $3
+
+build_path=$(cd $1 && pwd)
+cache_path=$(cd $2 && pwd)
+env_path=$(cd $3 && pwd)
+build_pack_path=$(cd $(dirname $(dirname $0)); pwd)
+heroku_path=$build_path/.heroku
+mkdir -p $heroku_path/node
+
+source ${build_pack_path}/lib/common.sh
+source ${build_path_path}/lib/build.sh
+
+load_config
+export_config_vars
+export_mix_env
+
+install_node

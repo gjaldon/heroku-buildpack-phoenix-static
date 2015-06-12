@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+cat <<EOF
+---
+addons:
+  []
+default_process_types:
+  web: mix phoenix.server
+EOF

@@ -20,6 +20,8 @@ load_config
 export_config_vars
 export_mix_env
 
+cached_node=$cache_dir/node-v$node_version-linux-x64.tar.gz
+
 download_node
 install_node
 install_npm

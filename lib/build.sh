@@ -1,13 +1,12 @@
 download_node() {
   local node_url="http://s3pository.heroku.com/node/v$node_version/node-v$node_version-linux-x64.tar.gz"
-  cached_node="$cache_dir/node-v$node_version-linux-x64.tar.gz"
 
   if [ ! -f ${cached_node} ]; then
-    info "Downloading node $node_version..."
-    curl $node_url -s -o
+    head "Downloading node $node_version..."
+    curl -s ${node_url} -o ${cached_node}
     cleanup_old_node
   else
-    info "Using cached node $node_version..."
+    head "Using cached node $node_version..."
   fi
 }
 
@@ -18,8 +17,8 @@ cleanup_old_node() {
 }
 
 install_node() {
-  info "Installing node $node_version..."
-  tar $cached_node xzf - -C /tmp
+  head "Installing node $node_version..."
+  tar xzf ${cached_node} -C /tmp
 
   # Move node (and npm) into .heroku/node and make them executable
   mv /tmp/node-v$node_version-linux-x64/* $heroku_dir/node
@@ -28,6 +27,7 @@ install_node() {
 }
 
 install_npm() {
+  head "Installing npm $npm_version..."
   # Optionally bootstrap a different npm version
   if [[ `npm --version` == "$npm_version" ]]; then
     info "npm `npm --version` already installed with node"
@@ -38,21 +38,27 @@ install_npm() {
 }
 
 install_and_cache_deps() {
+  head "Installing and caching node modules"
   cd $cache_dir
   cp -f $build_dir/{package.json,bower.json} ./
 
-  info "Installing and caching node modules"
   npm install --quiet --unsafe-perm --userconfig $build_dir/npmrc 2>&1 | indent
+  npm rebuild 2>&1 | indent
   npm --unsafe-perm prune 2>&1 | indent
   cp -r node_modules $build_dir
   cp -r bower_components $build_dir
+
+  cd - > /dev/null
 }
 
 build_static_assets() {
+  head "Building Phoenix static assets"
   cd $build_dir
+  # export PATH=$HOME/.heroku/node/bin:/bin:$HOME/bin:$HOME/node_modules/.bin:$PATH
 
-  info "Building Phoenix static assets"
   brunch build --production && mix phoenix.digest 2>&1 | indent
+
+  cd - > /dev/null
 }
 
 cache_versions() {

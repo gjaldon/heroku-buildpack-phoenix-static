@@ -13,6 +13,9 @@ mkdir -p $heroku_dir/node
 source ${build_pack_dir}/lib/common.sh
 source ${build_pack_dir}/lib/build.sh
 
+old_npm=$(file_contents "$cache_dir/npm-version")
+old_node=$(file_contents "$cache_dir/node-version")
+
 load_config
 export_config_vars
 export_mix_env
@@ -21,3 +24,5 @@ download_node
 install_node
 install_npm
 install_and_cache_deps
+
+build_static_assets

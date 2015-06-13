@@ -16,6 +16,14 @@ head() {
   echo "-----> $*"
 }
 
+file_contents() {
+  if test -f $1; then
+    echo "$(cat $1)"
+  else
+    echo ""
+  fi
+}
+
 load_config() {
   head "Checking Node version to use"
 

@@ -27,14 +27,14 @@ load_config() {
   if [ -f $custom_config_file ]; then
     source $custom_config_file
   else
-    indent "WARNING: phoenix_static_buildpack.config wasn't found in the app"
-    indent "Using default config from Phoenix static buildpack"
+    info "WARNING: phoenix_static_buildpack.config wasn't found in the app"
+    info "Using default config from Phoenix static buildpack"
   fi
 
-  indent "Will use the following versions:"
-  indent "* Node ${node_version}"
-  indent "Will export the following config vars:"
-  indent "* Config vars ${config_vars_to_export[*]}"
+  info "Will use the following versions:"
+  info "* Node ${node_version}"
+  info "Will export the following config vars:"
+  info "* Config vars ${config_vars_to_export[*]}"
 }
 
 export_config_vars() {
@@ -52,5 +52,5 @@ export_mix_env() {
     export MIX_ENV=prod
   fi
 
-  indent "* MIX_ENV=${MIX_ENV}"
+  info "* MIX_ENV=${MIX_ENV}"
 }

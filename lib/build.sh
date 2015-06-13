@@ -29,3 +29,16 @@ install_npm() {
     npm install --unsafe-perm --quiet -g npm@$npm_version 2>&1 >/dev/null | indent
   fi
 }
+
+install_and_cache_deps() {
+  cd $cache_dir
+  cp -f $build_dir/{package.json,bower.json} ./
+
+  info "Installing and caching node modules"
+  npm install --quiet --unsafe-perm --userconfig $build_dir/npmrc 2>&1 | indent
+  npm --unsafe-perm prune 2>&1 | indent
+  cp -r node_modules $build_dir
+  cp -r bower_components $build_dir
+}
+
+# TODO: prune cache of previous node versions

@@ -2,11 +2,11 @@ download_node() {
   local node_url="http://s3pository.heroku.com/node/v$node_version/node-v$node_version-linux-x64.tar.gz"
 
   if [ ! -f ${cached_node} ]; then
-    head "Downloading node $node_version..."
+    info "Downloading node ${node_version}..."
     curl -s ${node_url} -o ${cached_node}
     cleanup_old_node
   else
-    head "Using cached node $node_version..."
+    info "Using cached node ${node_version}..."
   fi
 }
 
@@ -17,7 +17,7 @@ cleanup_old_node() {
 }
 
 install_node() {
-  head "Installing node $node_version..."
+  info "Installing node $node_version..."
   tar xzf ${cached_node} -C /tmp
 
   # Move node (and npm) into .heroku/node and make them executable
@@ -27,7 +27,6 @@ install_node() {
 }
 
 install_npm() {
-  head "Installing npm $npm_version..."
   # Optionally bootstrap a different npm version
   if [[ `npm --version` == "$npm_version" ]]; then
     info "npm `npm --version` already installed with node"
@@ -38,25 +37,36 @@ install_npm() {
 }
 
 install_and_cache_deps() {
-  head "Installing and caching node modules"
+  info "Installing and caching node modules"
   cd $cache_dir
-  cp -f $build_dir/{package.json,bower.json} ./
+  cp -f $build_dir/package.json ./
 
   npm install --quiet --unsafe-perm --userconfig $build_dir/npmrc 2>&1 | indent
   npm rebuild 2>&1 | indent
   npm --unsafe-perm prune 2>&1 | indent
   cp -r node_modules $build_dir
-  cp -r bower_components $build_dir
-
+  install_bower_deps
   cd - > /dev/null
 }
 
-build_static_assets() {
-  head "Building Phoenix static assets"
-  cd $build_dir
-  # export PATH=$HOME/.heroku/node/bin:/bin:$HOME/bin:$HOME/node_modules/.bin:$PATH
+install_bower_deps() {
+  local bower_dir=$build_dir/bower.json
 
-  brunch build --production && mix phoenix.digest 2>&1 | indent
+  if [ -f $bower_dir ]; then
+    info "Installing and caching bower components"
+    cp -f $bower_dir ./
+    bower install
+    cp -r bower_components $build_dir
+  fi
+}
+
+build_static_assets() {
+  info "Building Phoenix static assets"
+  cd $build_dir
+  PATH=$build_dir/node_modules/.bin:$PATH
+
+  brunch build --production 2>&1 | indent
+  mix phoenix.digest 2>&1 | indent
 
   cd - > /dev/null
 }

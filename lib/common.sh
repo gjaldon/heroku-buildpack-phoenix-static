@@ -25,12 +25,12 @@ file_contents() {
 }
 
 load_config() {
-  head "Checking Node version to use"
+  info "Loading config..."
 
-  local custom_config_file="${build_path}/phoenix_static_buildpack.config"
+  local custom_config_file="${build_dir}/phoenix_static_buildpack.config"
 
   # Source for default versions file from buildpack first
-  source "${build_pack_path}/phoenix_static_buildpack.config"
+  source "${build_pack_dir}/phoenix_static_buildpack.config"
 
   if [ -f $custom_config_file ]; then
     source $custom_config_file

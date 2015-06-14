@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
+build_pack_dir=$(cd $(dirname $(dirname $0)); pwd)
+
 # Ensure dirs are present
 mkdir -p $1 $2 $3
 
 build_dir=$(cd $1 && pwd)
 cache_dir=$(cd $2 && pwd)
 env_dir=$(cd $3 && pwd)
-build_pack_dir=$(cd $(dirname $(dirname $0)); pwd)
 heroku_dir=$build_dir/.heroku
 mkdir -p $heroku_dir/node
 
@@ -16,15 +17,18 @@ source ${build_pack_dir}/lib/build.sh
 old_npm=$(file_contents "$cache_dir/npm-version")
 old_node=$(file_contents "$cache_dir/node-version")
 
+head "Loading configuration and environment"
 load_config
 export_config_vars
 export_mix_env
 
 cached_node=$cache_dir/node-v$node_version-linux-x64.tar.gz
 
+head "Installing binaries"
 download_node
 install_node
 install_npm
-install_and_cache_deps
 
+head "Building dependencies"
+install_and_cache_deps
 build_static_assets

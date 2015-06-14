@@ -85,6 +85,7 @@ cache_versions() {
 write_profile() {
   info "Creating runtime environment"
   mkdir -p $build_dir/.profile.d
-  local export_line="export PATH=\"\$HOME/.heroku/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\""
+  local export_line="export PATH=\"\$HOME/.heroku/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"
+                     export MIX_ENV=${MIX_ENV}"
   echo $export_line >> $build_dir/.profile.d/phoenix_static_buildpack_paths.sh
 }

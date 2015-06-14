@@ -11,9 +11,10 @@ download_node() {
 }
 
 cleanup_old_node() {
-  if [ "$old_node" != "$node_version" ]; then
+  local old_node_dir=$cache_dir/node-v$old_node-linux-x64.tar.gz
+  if [ "$old_node" != "$node_version" ] && [ -f $old_node_dir ]; then
     info "Cleaning up old node"
-    rm $cache_dir/node-v$old_node-linux-x64.tar.gz
+    rm $old_node_dir
   fi
 }
 

@@ -68,6 +68,7 @@ build_static_assets() {
 
   brunch build --production 2>&1 | indent
 
+  PATH=$build_dir/.platform_tools/erlang/bin:$PATH
   PATH=$build_dir/.platform_tools/elixir/bin:$PATH
   mix phoenix.digest 2>&1 | indent
 

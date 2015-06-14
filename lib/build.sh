@@ -46,6 +46,7 @@ install_and_cache_deps() {
   npm rebuild 2>&1 | indent
   npm --unsafe-perm prune 2>&1 | indent
   cp -r node_modules $build_dir
+  PATH=$build_dir/node_modules/.bin:$PATH
   install_bower_deps
   cd - > /dev/null
 }
@@ -64,7 +65,6 @@ install_bower_deps() {
 build_static_assets() {
   info "Building Phoenix static assets"
   cd $build_dir
-  PATH=$build_dir/node_modules/.bin:$PATH
 
   brunch build --production 2>&1 | indent
   mix phoenix.digest 2>&1 | indent

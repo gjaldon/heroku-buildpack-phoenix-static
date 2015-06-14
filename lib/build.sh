@@ -12,6 +12,7 @@ download_node() {
 
 cleanup_old_node() {
   if [ "$old_node" != "$node_version" ]; then
+    info "Cleaning up old node"
     rm $cache_dir/node-v$old_node-linux-x64.tar.gz
   fi
 }
@@ -75,4 +76,11 @@ cache_versions() {
   info "Caching versions for future builds"
   echo `node --version` > $cache_dir/node-version
   echo `npm --version` > $cache_dir/npm-version
+}
+
+write_profile() {
+  info "Creating runtime environment"
+  mkdir -p $build_dir/.profile.d
+  local export_line="export PATH=\"\$HOME/.heroku/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\""
+  echo $export_line >> $build_dir/.profile.d/phoenix_static_buildpack_paths.sh
 }

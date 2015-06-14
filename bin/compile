@@ -32,3 +32,6 @@ install_npm
 head "Building dependencies"
 install_and_cache_deps
 build_static_assets
+
+head "Finalizing build"
+write_profile

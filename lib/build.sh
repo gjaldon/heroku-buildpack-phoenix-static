@@ -67,6 +67,8 @@ build_static_assets() {
   cd $build_dir
 
   brunch build --production 2>&1 | indent
+
+  PATH=$build_dir/.platform_tools/elixir/bin:$PATH
   mix phoenix.digest 2>&1 | indent
 
   cd - > /dev/null

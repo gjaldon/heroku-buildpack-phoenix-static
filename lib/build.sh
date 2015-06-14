@@ -12,10 +12,18 @@ download_node() {
 
 cleanup_old_node() {
   local old_node_dir=$cache_dir/node-v$old_node-linux-x64.tar.gz
+
+
   if [ "$old_node" != "$node_version" ] && [ -f $old_node_dir ]; then
     info "Cleaning up old node and old dependencies in cache"
     rm $old_node_dir
     rm -rf $cache_dir/node_modules
+
+    local bower_components_dir=$cache_dir/bower_components
+
+    if [ -d $bower_components_dir ]; then
+      rm -rf $bower_components_dir
+    fi
   fi
 }
 

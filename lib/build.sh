@@ -72,17 +72,26 @@ install_bower_deps() {
   fi
 }
 
-build_static_assets() {
-  info "Building Phoenix static assets"
+postcompile() {
   cd $build_dir
-
-  brunch build --production 2>&1 | indent
-
   PATH=$build_dir/.platform_tools/erlang/bin:$PATH
   PATH=$build_dir/.platform_tools/elixir/bin:$PATH
-  mix phoenix.digest 2>&1 | indent
+
+  run_postcompile
 
   cd - > /dev/null
+}
+
+run_postcompile() {
+  local custom_postcompile="${build_dir}/postcompile"
+
+  if [ -f $custom_postcompile ]; then
+    info "Running custom postcompile"
+    source $custom_postcompile 2>&1 | indent
+  else
+    info "Running default postcompile"
+    source ${build_pack_dir}/postcompile 2>&1 | indent
+  fi
 }
 
 cache_versions() {

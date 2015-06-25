@@ -61,7 +61,7 @@ access to your `node_modules` and `mix`. This means that if you're using a Node 
 
 ```bash
 # app_root/postcompile
-guilp build:dist
+gulp build:dist
 mix phoenix.digest
 ```
 

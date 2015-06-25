@@ -5,7 +5,7 @@
 This buildpack is meant to be used with the [Heroku Buildpack for Elixir](https://github.com/HashNuke/heroku-buildpack-elixir). When deploying Phoenix apps to Heroku, static assets will need to be compiled. This buildpack sees to it that static assets are compiled and that a corresponding asset manifest is generated.
 
 ## Features
-* Easily customizable to your build needs with its `postcompile` hook!
+* Easily customizable to your build needs with its `compile` hook!
 * Works much like the [Heroku Buildpack for Elixir](https://github.com/HashNuke/heroku-buildpack-elixir)!
 * **Easy configuration** with `phoenix_static_buildpack.config` file
 * Automatically sets `DATABASE_URL` and includes `heroku-postgresql:hobby-dev` addon
@@ -42,12 +42,15 @@ npm_version=2.10.1
 
 # Add the config vars you want to be exported here
 config_vars_to_export=(DATABASE_URL)
+
+# We can change the filename for the compile script with this option
+compile="compile"
 ```
 
-## Postcompile
+## Compile
 
-By default, Phoenix uses `brunch` and recommends you to use `mix phoenix.digest` in production. For that, we have a default `postcompile` shell script which gets run after building dependencies and
-just before finalizing the build. The `postcompile` looks like this:
+By default, Phoenix uses `brunch` and recommends you to use `mix phoenix.digest` in production. For that, we have a default `compile` shell script which gets run after building dependencies and
+just before finalizing the build. The `compile` file looks like this:
 
 ```bash
 info "Building Phoenix static assets"
@@ -55,14 +58,14 @@ brunch build --production
 mix phoenix.digest
 ```
 
-To customize your app's postcompile hook, just add a `postcompile` file to your app's root directory.
-`postcompile` is just a shell script, so you can use any valid `bash` code. Keep in mind you'll have
+To customize your app's compile hook, just add a `compile` file to your app's root directory.
+`compile` is just a shell script, so you can use any valid `bash` code. Keep in mind you'll have
 access to your `node_modules` and `mix`. This means that if you're using a Node build tool other than `brunch`, you can just do something like:
 
 ```bash
-# app_root/postcompile
+# app_root/compile
 gulp build:dist
 mix phoenix.digest
 ```
 
-The above `postcompile` overrides the default one. :)
+The above `compile` overrides the default one. :)

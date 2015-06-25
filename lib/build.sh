@@ -72,25 +72,25 @@ install_bower_deps() {
   fi
 }
 
-postcompile() {
+compile() {
   cd $build_dir
   PATH=$build_dir/.platform_tools/erlang/bin:$PATH
   PATH=$build_dir/.platform_tools/elixir/bin:$PATH
 
-  run_postcompile
+  run_compile
 
   cd - > /dev/null
 }
 
-run_postcompile() {
-  local custom_postcompile="${build_dir}/postcompile"
+run_compile() {
+  local custom_compile="${build_dir}/${compile}"
 
-  if [ -f $custom_postcompile ]; then
-    info "Running custom postcompile"
-    source $custom_postcompile 2>&1 | indent
+  if [ -f $custom_compile ]; then
+    info "Running custom compile"
+    source $custom_compile 2>&1 | indent
   else
-    info "Running default postcompile"
-    source ${build_pack_dir}/postcompile 2>&1 | indent
+    info "Running default compile"
+    source ${build_pack_dir}/${compile} 2>&1 | indent
   fi
 }
 

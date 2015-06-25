@@ -31,7 +31,7 @@ install_npm
 
 head "Building dependencies"
 install_and_cache_deps
-postcompile
+compile
 
 head "Finalizing build"
 write_profile

@@ -1,3 +1,2 @@
-info "Building Phoenix static assets"
 brunch build --production
 mix phoenix.digest

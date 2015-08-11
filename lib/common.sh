@@ -47,15 +47,15 @@ load_config() {
 
 export_config_vars() {
   for config_var in ${config_vars_to_export[@]}; do
-    if [ -d $env_path ] && [ -f $env_path/${config_var} ]; then
-      export ${config_var}=$(cat $env_path/${config_var})
+    if [ -d $env_dir ] && [ -f $env_dir/${config_var} ]; then
+      export ${config_var}=$(cat $env_dir/${config_var})
     fi
   done
 }
 
 export_mix_env() {
-  if [ -d $env_path ] && [ -f $env_path/MIX_ENV ]; then
-    export MIX_ENV=$(cat $env_path/MIX_ENV)
+  if [ -d $env_dir ] && [ -f $env_dir/MIX_ENV ]; then
+    export MIX_ENV=$(cat $env_dir/MIX_ENV)
   else
     export MIX_ENV=prod
   fi

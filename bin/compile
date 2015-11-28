@@ -29,6 +29,9 @@ download_node
 install_node
 install_npm
 
+head "Installing Sass/Compass"
+install_sass
+
 head "Building dependencies"
 install_and_cache_deps
 compile

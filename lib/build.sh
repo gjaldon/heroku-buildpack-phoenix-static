@@ -116,8 +116,10 @@ install_sass() {
     info "Restoring ruby gems directory from cache"
     cp -r $cache_dir/ruby/.gem $build_dir
     HOME=$build_dir gem update sass --user-install --no-rdoc --no-ri
+    HOME=$build_dir gem install compass --user-install --no-rdoc --no-ri
   else
     HOME=$build_dir gem install sass --user-install --no-rdoc --no-ri
+    HOME=$build_dir gem install compass --user-install --no-rdoc --no-ri
   fi
 
   rm -rf $cache_dir/ruby

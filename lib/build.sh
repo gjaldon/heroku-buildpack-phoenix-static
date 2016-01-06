@@ -109,7 +109,7 @@ write_profile() {
 }
 
 install_sass() {
-  export GEM_HOME=$build_dir/.gem/ruby/2.2.0
+  export GEM_HOME=$build_dir/.gem/ruby/2.2.1
   export PATH=$GEM_HOME/bin:$PATH
 
   if test -d $cache_dir/ruby/.gem; then

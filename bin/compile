@@ -24,13 +24,13 @@ export_mix_env
 
 cached_node=$cache_dir/node-v$node_version-linux-x64.tar.gz
 
-head "Building dependencies"
-install_and_cache_deps
-
 head "Installing binaries"
 download_node
 install_node
 install_npm
+
+head "Building dependencies"
+install_and_cache_npm_deps
 
 compile
 

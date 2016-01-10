@@ -43,19 +43,23 @@ install_npm() {
     info "Using default npm version"
   else
     info "Downloading and installing npm $npm_version (replacing version `npm --version`)..."
+    cd $build_dir
     npm install --unsafe-perm --quiet -g npm@$npm_version 2>&1 >/dev/null | indent
   fi
 }
 
-install_and_cache_deps() {
+install_and_cache_npm_deps() {
   info "Installing and caching node modules"
-  cd $cache_dir
-  cp -f $build_dir/package.json ./
+  cd $build_dir
+  if [ -d $cache_dir/node_modules ]; then
+    mkdir -p node_modules
+    cp -r $cache_dir/node_modules/* node_modules/
+  fi
 
   npm install --quiet --unsafe-perm --userconfig $build_dir/npmrc 2>&1 | indent
   npm rebuild 2>&1 | indent
   npm --unsafe-perm prune 2>&1 | indent
-  cp -r node_modules $build_dir
+  cp -r node_modules $cache_dir
   PATH=$build_dir/node_modules/.bin:$PATH
   install_bower_deps
   cd - > /dev/null

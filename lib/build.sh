@@ -71,9 +71,7 @@ install_bower_deps() {
 
   if [ -f $bower_json ]; then
     info "Installing and caching bower components"
-    cp -f $bower_json ./
     bower install
-    cp -r bower_components $build_dir
   fi
 }
 

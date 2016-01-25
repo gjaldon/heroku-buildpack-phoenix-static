@@ -62,7 +62,6 @@ install_and_cache_npm_deps() {
   cp -r node_modules $cache_dir
   PATH=$build_dir/node_modules/.bin:$PATH
   install_bower_deps
-  cd - > /dev/null
 }
 
 install_bower_deps() {
@@ -81,8 +80,6 @@ compile() {
   PATH=$build_dir/.platform_tools/elixir/bin:$PATH
 
   run_compile
-
-  cd - > /dev/null
 }
 
 run_compile() {

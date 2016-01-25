@@ -66,7 +66,8 @@ install_and_cache_npm_deps() {
 }
 
 install_bower_deps() {
-  local bower_json=$build_dir/bower.json
+  cd $build_dir
+  local bower_json=bower.json
 
   if [ -f $bower_json ]; then
     info "Installing and caching bower components"

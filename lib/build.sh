@@ -62,17 +62,15 @@ install_and_cache_npm_deps() {
   cp -r node_modules $cache_dir
   PATH=$build_dir/node_modules/.bin:$PATH
   install_bower_deps
-  cd - > /dev/null
 }
 
 install_bower_deps() {
-  local bower_dir=$build_dir/bower.json
+  cd $build_dir
+  local bower_json=bower.json
 
-  if [ -f $bower_dir ]; then
+  if [ -f $bower_json ]; then
     info "Installing and caching bower components"
-    cp -f $bower_dir ./
     bower install
-    cp -r bower_components $build_dir
   fi
 }
 
@@ -82,8 +80,6 @@ compile() {
   PATH=$build_dir/.platform_tools/elixir/bin:$PATH
 
   run_compile
-
-  cd - > /dev/null
 }
 
 run_compile() {

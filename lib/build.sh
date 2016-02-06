@@ -70,7 +70,13 @@ install_bower_deps() {
 
   if [ -f $bower_json ]; then
     info "Installing and caching bower components"
+
+    if [ -d $cache_dir/bower_components ]; then
+      mkdir -p bower_components
+      cp -r $cache_dir/bower_components/* bower_components/
+    fi
     bower install
+    cp -r bower_components $cache_dir
   fi
 }
 

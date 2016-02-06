@@ -35,7 +35,7 @@ __Here's a full config file with all available options:__
 
 ```bash
 # We can set the version of Node to use for the app here
-node_version=0.12.4
+node_version=5.3.0
 
 # We can set the version of NPM to use for the app here
 npm_version=2.10.1

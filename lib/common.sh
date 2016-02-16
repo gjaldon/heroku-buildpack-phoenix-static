@@ -38,6 +38,8 @@ load_config() {
     info "WARNING: phoenix_static_buildpack.config wasn't found in the app"
     info "Using default config from Phoenix static buildpack"
   fi
+  
+  phoenix_dir=$build_dir/$phoenix_relative_path
 
   info "Will use the following versions:"
   info "* Node ${node_version}"

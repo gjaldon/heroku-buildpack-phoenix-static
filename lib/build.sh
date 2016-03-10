@@ -50,7 +50,7 @@ install_npm() {
 
 install_and_cache_npm_deps() {
   info "Installing and caching node modules"
-  cd $build_dir
+  cd $phoenix_dir
   if [ -d $cache_dir/node_modules ]; then
     mkdir -p node_modules
     cp -r $cache_dir/node_modules/* node_modules/
@@ -60,12 +60,12 @@ install_and_cache_npm_deps() {
   npm rebuild 2>&1 | indent
   npm --unsafe-perm prune 2>&1 | indent
   cp -r node_modules $cache_dir
-  PATH=$build_dir/node_modules/.bin:$PATH
+  PATH=$phoenix_dir/node_modules/.bin:$PATH
   install_bower_deps
 }
 
 install_bower_deps() {
-  cd $build_dir
+  cd $phoenix_dir
   local bower_json=bower.json
 
   if [ -f $bower_json ]; then
@@ -81,7 +81,7 @@ install_bower_deps() {
 }
 
 compile() {
-  cd $build_dir
+  cd $phoenix_dir
   PATH=$build_dir/.platform_tools/erlang/bin:$PATH
   PATH=$build_dir/.platform_tools/elixir/bin:$PATH
 
@@ -109,7 +109,7 @@ cache_versions() {
 write_profile() {
   info "Creating runtime environment"
   mkdir -p $build_dir/.profile.d
-  local export_line="export PATH=\"\$HOME/.heroku/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\"
+  local export_line="export PATH=\"\$HOME/.heroku/node/bin:\$HOME/bin:\$HOME/$phoenix_relative_path/node_modules/.bin:\$PATH\"
                      export MIX_ENV=${MIX_ENV}"
   echo $export_line >> $build_dir/.profile.d/phoenix_static_buildpack_paths.sh
 }

@@ -34,6 +34,9 @@ If you don't specify a config option, then the default option from the buildpack
 __Here's a full config file with all available options:__
 
 ```bash
+# We can set the path to phoenix app. E.g. apps/phoenix_app when in umbrella.
+phoenix_relative_path=.
+
 # We can set the version of Node to use for the app here
 node_version=5.3.0
 

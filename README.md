@@ -32,7 +32,7 @@ git push heroku master
 
 Create a `phoenix_static_buildpack.config` file in your app's root dir if you want to override the defaults. The file's syntax is bash.
 
-If you don't specify a config option, then the default option from the buildpack's [`phoenix_static_buildpack.config`](https://github.com/gjaldon/phoenix-static-buildpack/blob/master/phoenix_static_buildpack.config) file will be used.
+If you don't specify a config option, then the default option from the buildpack's [`phoenix_static_buildpack.config`](https://github.com/gjaldon/heroku-buildpack-phoenix-static/blob/master/phoenix_static_buildpack.config) file will be used.
 
 
 __Here's a full config file with all available options:__

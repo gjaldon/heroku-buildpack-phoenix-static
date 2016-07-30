@@ -1,2 +1,6 @@
-brunch build --production
+if [ -x "$(command -v brunch)" ]; then
+  brunch build --production
+else
+  echo "Brunch is not installed, not running!";
+fi
 mix phoenix.digest

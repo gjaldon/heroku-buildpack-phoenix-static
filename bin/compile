@@ -31,15 +31,17 @@ load_config
 export_config_vars
 export_mix_env
 
-cached_node=$cache_dir/node-v$node_version-linux-x64.tar.gz
+if [ -e package.json ]; then
+  cached_node=$cache_dir/node-v$node_version-linux-x64.tar.gz
 
-head "Installing binaries"
-download_node
-install_node
-install_npm
+  head "Installing binaries"
+  download_node
+  install_node
+  install_npm
 
-head "Building dependencies"
-install_and_cache_npm_deps
+  head "Building dependencies"
+  install_and_cache_npm_deps
+fi
 
 compile
 

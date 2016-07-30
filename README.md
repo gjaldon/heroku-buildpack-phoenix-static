@@ -17,11 +17,15 @@ This buildpack is meant to be used with the [Heroku Buildpack for Elixir](https:
 ## Usage
 
 ```bash
-# Set the buildpack for your Heroku app
-heroku buildpacks:set https://github.com/gjaldon/phoenix-static-buildpack
+# Create a Heroku instance for your project
+heroku apps:create my_heroku_app
 
-# Add this buildpack after the Elixir buildpack
-heroku buildpacks:add --index 1 https://github.com/HashNuke/heroku-buildpack-elixir
+# Set and add the buildpacks for your Heroku app
+heroku buildpacks:set https://github.com/HashNuke/heroku-buildpack-elixir
+heroku buildpacks:add https://github.com/gjaldon/heroku-buildpack-phoenix-static
+
+# Deploy
+git push heroku master
 ```
 
 ## Configuration

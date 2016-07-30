@@ -1,9 +1,19 @@
 #!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
 
 build_pack_dir=$(cd $(dirname $(dirname $0)); pwd)
 
-# Ensure dirs are present
-mkdir -p $1 $2 $3
+### Configure environment
+
+set -o errexit    # always exit on error
+set -o pipefail   # don't ignore exit codes when piping output
+set -o nounset    # fail on unset variables
+unset GIT_DIR     # Avoid GIT_DIR leak from previous build steps
+
+
+### Configure directories
+
+mkdir -p $1 $2 $3 # Ensure dirs are present
 
 build_dir=$(cd $1 && pwd)
 cache_dir=$(cd $2 && pwd)

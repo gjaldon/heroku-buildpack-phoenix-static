@@ -30,11 +30,15 @@ cleanup_old_node() {
 install_node() {
   info "Installing node $node_version..."
   tar xzf ${cached_node} -C /tmp
+  local node_dir=$heroku_dir/node
 
+  # Sometimes $node_dir will have files from previous deploys. Need to remove those
+  rm -rf $node_dir
+  mkdir -p $node_dir
   # Move node (and npm) into .heroku/node and make them executable
-  mv /tmp/node-v$node_version-linux-x64/* $heroku_dir/node
-  chmod +x $heroku_dir/node/bin/*
-  PATH=$heroku_dir/node/bin:$PATH
+  mv /tmp/node-v$node_version-linux-x64/* $node_dir
+  chmod +x $node_dir/bin/*
+  PATH=$node_dir/bin:$PATH
 }
 
 install_npm() {

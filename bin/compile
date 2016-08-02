@@ -18,7 +18,6 @@ build_dir=$(cd $1 && pwd)
 cache_dir=$(cd $2 && pwd)
 env_dir=$(cd $3 && pwd)
 heroku_dir=$build_dir/.heroku
-mkdir -p $heroku_dir/node
 
 source ${build_pack_dir}/lib/common.sh
 source ${build_pack_dir}/lib/build.sh

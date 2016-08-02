@@ -4,6 +4,10 @@
 
 This buildpack is meant to be used with the [Heroku Buildpack for Elixir](https://github.com/HashNuke/heroku-buildpack-elixir). When deploying Phoenix apps to Heroku, static assets will need to be compiled. This buildpack sees to it that static assets are compiled and that a corresponding asset manifest is generated.
 
+## When To Use
+
+This buildpack is only necessary when you need to compile static assets during deploys. You will need not need this buildpack if you are using Phoenix only as a REST API.
+
 ## Features
 * Easily customizable to your build needs with its `compile` hook!
 * Works much like the [Heroku Buildpack for Elixir](https://github.com/HashNuke/heroku-buildpack-elixir)!

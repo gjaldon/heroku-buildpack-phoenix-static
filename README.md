@@ -4,10 +4,6 @@
 
 This buildpack is meant to be used with the [Heroku Buildpack for Elixir](https://github.com/HashNuke/heroku-buildpack-elixir). When deploying Phoenix apps to Heroku, static assets will need to be compiled. This buildpack sees to it that static assets are compiled and that a corresponding asset manifest is generated.
 
-## When To Use
-
-This buildpack is only necessary when you need to compile static assets during deploys. You will need not need this buildpack if you are using Phoenix only as a REST API.
-
 ## Features
 * Easily customizable to your build needs with its `compile` hook!
 * Works much like the [Heroku Buildpack for Elixir](https://github.com/HashNuke/heroku-buildpack-elixir)!
@@ -80,3 +76,13 @@ mix phoenix.digest
 ```
 
 The above `compile` overrides the default one. :)
+
+
+## FAQ
+
+1. When to use?
+- This buildpack is only necessary when you need to compile static assets during deploys. You will need not need this buildpack if you are using Phoenix only as a REST API.
+
+2. Do I need `heroku-buildpack-nodejs` with this?
+- No, this buildpack installs Node for you. How it differs from the NodeJS buildpack
+is that it adds `mix` to the PATH so you can run `mix` commands like `mix phoenix.digest`.

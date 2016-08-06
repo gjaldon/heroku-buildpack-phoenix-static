@@ -1,3 +1,12 @@
+load_previous_npm_node_versions() {
+  if [ -f $cache_dir/npm-version ]; then
+    old_npm=$(<$cache_dir/npm-version)
+  fi
+  if [ -f $cache_dir/npm-version ]; then
+    old_node=$(<$cache_dir/node-version)
+  fi
+}
+
 download_node() {
   local node_url="http://s3pository.heroku.com/node/v$node_version/node-v$node_version-linux-x64.tar.gz"
 

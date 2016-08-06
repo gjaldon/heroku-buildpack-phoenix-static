@@ -43,4 +43,5 @@ install_and_cache_npm_deps
 compile
 
 head "Finalizing build"
+cache_versions
 write_profile

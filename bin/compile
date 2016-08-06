@@ -22,8 +22,8 @@ heroku_dir=$build_dir/.heroku
 source ${build_pack_dir}/lib/common.sh
 source ${build_pack_dir}/lib/build.sh
 
-old_npm=$(file_contents "$cache_dir/npm-version")
-old_node=$(file_contents "$cache_dir/node-version")
+old_npm=$(<$cache_dir/npm-version)
+old_node=$(<$cache_dir/node-version)
 
 head "Loading configuration and environment"
 load_config

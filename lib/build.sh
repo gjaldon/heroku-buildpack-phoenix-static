@@ -11,11 +11,13 @@ download_node() {
 }
 
 cleanup_old_node() {
-  local old_node_dir=$cache_dir/node-v$old_node-linux-x64.tar.gz
+  local old_node_dir=$cache_dir/node-$old_node-linux-x64.tar.gz
 
+  # Note that $old_node will have a format of "v5.5.0" while $node_version
+  # has the format "5.6.0"
 
-  if [ "$old_node" != "$node_version" ] && [ -f $old_node_dir ]; then
-    info "Cleaning up old node and old dependencies in cache"
+  if [ $old_node != v$node_version ] && [ -f $old_node_dir ]; then
+    info "Cleaning up old Node $old_node and old dependencies in cache"
     rm $old_node_dir
     rm -rf $cache_dir/node_modules
 

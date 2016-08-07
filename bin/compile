@@ -22,9 +22,9 @@ heroku_dir=$build_dir/.heroku
 source ${build_pack_dir}/lib/common.sh
 source ${build_pack_dir}/lib/build.sh
 
-load_previous_npm_node_versions
 
 head "Loading configuration and environment"
+load_previous_npm_node_versions
 load_config
 export_config_vars
 export_mix_env

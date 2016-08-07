@@ -1,8 +1,10 @@
 cleanup_cache() {
-  if [ $clean_cache ]; then
-    info "`clean_cache` option set to true."
+  if [ $clean_cache = true ]; then
+    info "clean_cache option set to true."
     info "Cleaning out cache contents"
-    rm -rf $cache_dir/*
+    rm -rf $cache_dir/npm-version
+    rm -rf $cache_dir/node-version
+    cleanup_old_node
   fi
 }
 
@@ -21,7 +23,6 @@ download_node() {
   if [ ! -f ${cached_node} ]; then
     info "Downloading node ${node_version}..."
     curl -s ${node_url} -o ${cached_node}
-    cleanup_old_node
   else
     info "Using cached node ${node_version}..."
   fi
@@ -33,7 +34,7 @@ cleanup_old_node() {
   # Note that $old_node will have a format of "v5.5.0" while $node_version
   # has the format "5.6.0"
 
-  if [ $old_node != v$node_version ] && [ -f $old_node_dir ]; then
+  if [ $clean_cache = true ] || [ $old_node != v$node_version ] && [ -f $old_node_dir ]; then
     info "Cleaning up old Node $old_node and old dependencies in cache"
     rm $old_node_dir
     rm -rf $cache_dir/node_modules

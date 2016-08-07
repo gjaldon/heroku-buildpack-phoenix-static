@@ -38,8 +38,14 @@ If you don't specify a config option, then the default option from the buildpack
 __Here's a full config file with all available options:__
 
 ```bash
-# We can set the path to phoenix app. E.g. apps/phoenix_app when in umbrella.
-phoenix_relative_path=.
+# Clean out cache contents from previous deploys
+clean_cache=false
+
+# We can change the filename for the compile script with this option
+compile="compile"
+
+# Add the config vars you want to be exported here
+config_vars_to_export=(DATABASE_URL)
 
 # We can set the version of Node to use for the app here
 node_version=5.3.0
@@ -47,11 +53,8 @@ node_version=5.3.0
 # We can set the version of NPM to use for the app here
 npm_version=2.10.1
 
-# Add the config vars you want to be exported here
-config_vars_to_export=(DATABASE_URL)
-
-# We can change the filename for the compile script with this option
-compile="compile"
+# We can set the path to phoenix app. E.g. apps/phoenix_app when in umbrella.
+phoenix_relative_path=.
 ```
 
 ## Compile

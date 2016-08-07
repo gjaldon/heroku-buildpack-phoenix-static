@@ -1,3 +1,11 @@
+cleanup_cache() {
+  if [ $clean_cache ]; then
+    info "`clean_cache` option set to true."
+    info "Cleaning out cache contents"
+    rm -rf $cache_dir/*
+  fi
+}
+
 load_previous_npm_node_versions() {
   if [ -f $cache_dir/npm-version ]; then
     old_npm=$(<$cache_dir/npm-version)

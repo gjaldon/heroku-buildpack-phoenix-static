@@ -38,7 +38,7 @@ load_config() {
     info "WARNING: phoenix_static_buildpack.config wasn't found in the app"
     info "Using default config from Phoenix static buildpack"
   fi
-  
+
   phoenix_dir=$build_dir/$phoenix_relative_path
 
   info "Will use the following versions:"
@@ -56,10 +56,12 @@ export_config_vars() {
 }
 
 export_mix_env() {
-  if [ -d $env_dir ] && [ -f $env_dir/MIX_ENV ]; then
-    export MIX_ENV=$(cat $env_dir/MIX_ENV)
-  else
-    export MIX_ENV=prod
+  if [ -z "${MIX_ENV}" ]; then
+    if [ -d $env_dir ] && [ -f $env_dir/MIX_ENV ]; then
+      export MIX_ENV=$(cat $env_dir/MIX_ENV)
+    else
+      export MIX_ENV=prod
+    fi
   fi
 
   info "* MIX_ENV=${MIX_ENV}"

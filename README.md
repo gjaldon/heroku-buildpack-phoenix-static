@@ -28,6 +28,28 @@ heroku buildpacks:add https://github.com/gjaldon/heroku-buildpack-phoenix-static
 git push heroku master
 ```
 
+### Serve with Sass assets
+
+If your project serves Sass assets, you need the sass binary for `sass-brunch` via ruby buildpack.
+
+Create a `Gemfile` to include the `sass` gem:
+```
+source 'https://rubygems.org'
+ruby '2.3.1'
+gem 'sass'
+```
+
+Then run generate the `Gemfile.lock`:
+```bash
+bundle install
+```
+
+Finally, add the ruby buildpack.
+```bash
+# Add the ruby buildpack to your Heroku app
+heroku buildpacks:add https://github.com/heroku/heroku-buildpack-ruby
+```
+
 ## Configuration
 
 Create a `phoenix_static_buildpack.config` file in your app's root dir if you want to override the defaults. The file's syntax is bash.

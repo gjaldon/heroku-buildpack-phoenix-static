@@ -170,10 +170,24 @@ cache_versions() {
   echo `npm --version` > $cache_dir/npm-version
 }
 
+finalize_node() {
+  if [ $remove_node = true ]; then
+    remove_node
+  else
+    write_profile
+  fi
+}
+
 write_profile() {
   info "Creating runtime environment"
   mkdir -p $build_dir/.profile.d
   local export_line="export PATH=\"\$HOME/.heroku/node/bin:\$HOME/.heroku/yarn/bin:\$HOME/bin:\$HOME/$phoenix_relative_path/node_modules/.bin:\$PATH\"
                      export MIX_ENV=${MIX_ENV}"
   echo $export_line >> $build_dir/.profile.d/phoenix_static_buildpack_paths.sh
+}
+
+remove_node() {
+  info "Removing node and node_modules"
+  rm -rf $phoenix_dir/node_modules
+  rm -rf $heroku_dir/node
 }

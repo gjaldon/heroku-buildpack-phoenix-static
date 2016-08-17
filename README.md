@@ -77,6 +77,9 @@ npm_version=2.10.1
 
 # We can set the path to phoenix app. E.g. apps/phoenix_app when in umbrella.
 phoenix_relative_path=.
+
+# Remove node and node_modules directory to keep slug size down if it is not needed.
+remove_node=false
 ```
 
 ## Compile

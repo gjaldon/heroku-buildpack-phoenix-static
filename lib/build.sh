@@ -181,8 +181,7 @@ finalize_node() {
 write_profile() {
   info "Creating runtime environment"
   mkdir -p $build_dir/.profile.d
-  local export_line="export PATH=\"\$HOME/.heroku/node/bin:\$HOME/.heroku/yarn/bin:\$HOME/bin:\$HOME/$phoenix_relative_path/node_modules/.bin:\$PATH\"
-                     export MIX_ENV=${MIX_ENV}"
+  local export_line="export PATH=\"\$HOME/.heroku/node/bin:\$HOME/.heroku/yarn/bin:\$HOME/bin:\$HOME/$phoenix_relative_path/node_modules/.bin:\$PATH\""
   echo $export_line >> $build_dir/.profile.d/phoenix_static_buildpack_paths.sh
 }
 

@@ -86,11 +86,11 @@ just before finalizing the build. The `compile` file looks like this:
 
 ```bash
 info "Building Phoenix static assets"
-npm run deploy
+brunch build --production
 mix phoenix.digest
 ```
 
-To customize your app's compile hook, you can either change the `deploy` script in `package.json` or add a `compile` file to your app's root directory.
+To customize your app's compile hook, just add a `compile` file to your app's root directory.
 `compile` is just a shell script, so you can use any valid `bash` code. Keep in mind you'll have
 access to your `node_modules` and `mix`. This means that if you're using a Node build tool other than `brunch`, you can just do something like:
 

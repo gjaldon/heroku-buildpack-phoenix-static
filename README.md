@@ -106,7 +106,7 @@ The above `compile` overrides the default one. :)
 ## FAQ
 
 1. When to use?
-- This buildpack is only necessary when you need to compile static assets during deploys. You will need not need this buildpack if you are using Phoenix only as a REST API.
+- This buildpack is only necessary when you need to compile static assets during deploys. You will not need this buildpack if you are using Phoenix only as a REST API.
 
 2. Do I need `heroku-buildpack-nodejs` with this?
 - No, this buildpack installs Node for you. How it differs from the NodeJS buildpack

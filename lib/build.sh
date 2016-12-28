@@ -4,6 +4,7 @@ cleanup_cache() {
     info "Cleaning out cache contents"
     rm -rf $cache_dir/npm-version
     rm -rf $cache_dir/node-version
+    rm -rf $cache_dir/phoenix-static
     rm -rf $cache_dir/yarn-cache
     cleanup_old_node
   fi
@@ -156,6 +157,11 @@ compile() {
 run_compile() {
   local custom_compile="${build_dir}/${compile}"
 
+  cd $phoenix_dir
+  mkdir -p $cache_dir/phoenix-static
+  info "Restoring cached assets"
+  rsync -a -v --ignore-existing $cache_dir/phoenix-static/ priv/static
+
   if [ -f $custom_compile ]; then
     info "Running custom compile"
     source $custom_compile 2>&1 | indent
@@ -163,6 +169,9 @@ run_compile() {
     info "Running default compile"
     source ${build_pack_dir}/${compile} 2>&1 | indent
   fi
+
+  info "Caching assets"
+  rsync -a -v priv/static/ $cache_dir/phoenix-static
 }
 
 cache_versions() {

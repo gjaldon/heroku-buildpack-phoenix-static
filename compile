@@ -1,2 +1,2 @@
 brunch build --production
-mix phoenix.digest
+mix do phoenix.digest, phoenix.digest.clean

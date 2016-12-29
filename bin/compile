@@ -40,6 +40,9 @@ if [ -f "$build_dir/yarn.lock" ]; then
   install_yarn "$heroku_dir/yarn"
 fi
 
+head "Installing Sass/Compass"
+install_sass
+
 head "Building dependencies"
 install_and_cache_deps
 

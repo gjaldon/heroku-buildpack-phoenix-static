@@ -47,4 +47,4 @@ compile
 
 head "Finalizing build"
 cache_versions
-write_profile
+finalize_node

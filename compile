@@ -1,2 +1,6 @@
 brunch build --production
-mix do phoenix.digest, phoenix.digest.clean
+mix phoenix.digest
+
+if mix help phoenix.digest.clean 1>/dev/null 2>&1; then
+  mix phoenix.digest.clean
+fi

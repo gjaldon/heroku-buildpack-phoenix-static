@@ -4,6 +4,7 @@ cleanup_cache() {
     info "Cleaning out cache contents"
     rm -rf $cache_dir/npm-version
     rm -rf $cache_dir/node-version
+    rm -rf $cache_dir/yarn-cache
     cleanup_old_node
   fi
 }
@@ -125,7 +126,7 @@ install_npm_deps() {
 }
 
 install_yarn_deps() {
-  yarn install --pure-lockfile 2>&1
+  yarn install --cache-folder $cache_dir/yarn-cache --pure-lockfile 2>&1
 }
 
 install_bower_deps() {

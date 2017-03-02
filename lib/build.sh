@@ -159,7 +159,7 @@ run_compile() {
 
   cd $phoenix_dir
 
-  has_clean=$(mix help phoenix.digest.clean 1>/dev/null 2>&1; echo $?)
+  has_clean=$(mix help "${phoenix_ex}.digest.clean" 1>/dev/null 2>&1; echo $?)
 
   if [ $has_clean = 0 ]; then
     mkdir -p $cache_dir/phoenix-static

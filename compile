@@ -1,4 +1,7 @@
 brunch build --production
+
+cd $phoenix_dir
+
 mix phoenix.digest
 
 if mix help phoenix.digest.clean 1>/dev/null 2>&1; then

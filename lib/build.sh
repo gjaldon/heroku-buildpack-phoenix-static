@@ -167,6 +167,8 @@ run_compile() {
     rsync -a -v --ignore-existing $cache_dir/phoenix-static/ priv/static
   fi
 
+  cd $assets_dir
+
   if [ -f $custom_compile ]; then
     info "Running custom compile"
     source $custom_compile 2>&1 | indent
@@ -174,6 +176,8 @@ run_compile() {
     info "Running default compile"
     source ${build_pack_dir}/${compile} 2>&1 | indent
   fi
+
+  cd $phoenix_dir
 
   if [ $has_clean = 0 ]; then
     info "Caching assets"

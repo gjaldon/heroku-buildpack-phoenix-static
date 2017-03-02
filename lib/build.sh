@@ -102,7 +102,7 @@ install_yarn() {
 
 install_and_cache_deps() {
   info "Installing and caching node modules"
-  cd $phoenix_dir
+  cd $assets_dir
   if [ -d $cache_dir/node_modules ]; then
     mkdir -p node_modules
     cp -r $cache_dir/node_modules/* node_modules/
@@ -115,7 +115,7 @@ install_and_cache_deps() {
   fi
 
   cp -r node_modules $cache_dir
-  PATH=$phoenix_dir/node_modules/.bin:$PATH
+  PATH=$assets_dir/node_modules/.bin:$PATH
   install_bower_deps
 }
 
@@ -131,7 +131,7 @@ install_yarn_deps() {
 }
 
 install_bower_deps() {
-  cd $phoenix_dir
+  cd $assets_dir
   local bower_json=bower.json
 
   if [ -f $bower_json ]; then
@@ -204,6 +204,6 @@ write_profile() {
 
 remove_node() {
   info "Removing node and node_modules"
-  rm -rf $phoenix_dir/node_modules
+  rm -rf $assets_dir/node_modules
   rm -rf $heroku_dir/node
 }

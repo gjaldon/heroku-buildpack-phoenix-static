@@ -38,6 +38,7 @@ load_config() {
   fi
 
   phoenix_dir=$build_dir/$phoenix_relative_path
+  assets_dir=$phoenix_dir/$assets_path
 
   info "Will use the following versions:"
   info "* Node ${node_version}"

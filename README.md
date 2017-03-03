@@ -80,6 +80,12 @@ phoenix_relative_path=.
 
 # Remove node and node_modules directory to keep slug size down if it is not needed.
 remove_node=false
+
+# We can change path that npm dependencies are in relation to phoenix app. E.g. assets for phoenix 1.3 support.
+assets_path=.
+
+# We can change phoenix mix namespace tasks. E.g. phx for phoenix 1.3 support.
+phoenix_ex=phoenix
 ```
 
 ## Compile
@@ -89,8 +95,12 @@ just before finalizing the build. The `compile` file looks like this:
 
 ```bash
 info "Building Phoenix static assets"
+
+cd assets
 brunch build --production
-mix phoenix.digest
+
+cd ..
+mix phx.digest
 ```
 
 To customize your app's compile hook, just add a `compile` file to your app's root directory.

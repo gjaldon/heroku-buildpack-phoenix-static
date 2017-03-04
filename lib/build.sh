@@ -108,7 +108,7 @@ install_and_cache_deps() {
     cp -r $cache_dir/node_modules/* node_modules/
   fi
 
-  if [ -f "$build_dir/yarn.lock" ]; then
+  if [ -f "$assets_dir/yarn.lock" ]; then
     install_yarn_deps
   else
     install_npm_deps

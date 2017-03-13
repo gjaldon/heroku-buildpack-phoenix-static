@@ -102,20 +102,20 @@ install_yarn() {
 
 install_and_cache_deps() {
   info "Installing and caching node modules"
-  cd $phoenix_dir
+  cd $assets_dir
   if [ -d $cache_dir/node_modules ]; then
     mkdir -p node_modules
     cp -r $cache_dir/node_modules/* node_modules/
   fi
 
-  if [ -f "$build_dir/yarn.lock" ]; then
+  if [ -f "$assets_dir/yarn.lock" ]; then
     install_yarn_deps
   else
     install_npm_deps
   fi
 
   cp -r node_modules $cache_dir
-  PATH=$phoenix_dir/node_modules/.bin:$PATH
+  PATH=$assets_dir/node_modules/.bin:$PATH
   install_bower_deps
 }
 
@@ -131,7 +131,7 @@ install_yarn_deps() {
 }
 
 install_bower_deps() {
-  cd $phoenix_dir
+  cd $assets_dir
   local bower_json=bower.json
 
   if [ -f $bower_json ]; then
@@ -159,13 +159,15 @@ run_compile() {
 
   cd $phoenix_dir
 
-  has_clean=$(mix help phoenix.digest.clean 1>/dev/null 2>&1; echo $?)
+  has_clean=$(mix help "${phoenix_ex}.digest.clean" 1>/dev/null 2>&1; echo $?)
 
   if [ $has_clean = 0 ]; then
     mkdir -p $cache_dir/phoenix-static
     info "Restoring cached assets"
     rsync -a -v --ignore-existing $cache_dir/phoenix-static/ priv/static
   fi
+
+  cd $assets_dir
 
   if [ -f $custom_compile ]; then
     info "Running custom compile"
@@ -174,6 +176,8 @@ run_compile() {
     info "Running default compile"
     source ${build_pack_dir}/${compile} 2>&1 | indent
   fi
+
+  cd $phoenix_dir
 
   if [ $has_clean = 0 ]; then
     info "Caching assets"
@@ -204,6 +208,6 @@ write_profile() {
 
 remove_node() {
   info "Removing node and node_modules"
-  rm -rf $phoenix_dir/node_modules
+  rm -rf $assets_dir/node_modules
   rm -rf $heroku_dir/node
 }

@@ -91,17 +91,7 @@ phoenix_ex=phoenix
 ## Compile
 
 By default, Phoenix uses `brunch` and recommends you to use `mix phoenix.digest` in production. For that, we have a default `compile` shell script which gets run after building dependencies and
-just before finalizing the build. The `compile` file looks like this:
-
-```bash
-info "Building Phoenix static assets"
-
-cd assets
-brunch build --production
-
-cd ..
-mix phx.digest
-```
+just before finalizing the build. The `compile` file [looks like this](https://github.com/gjaldon/heroku-buildpack-phoenix-static/blob/master/compile).
 
 To customize your app's compile hook, just add a `compile` file to your app's root directory.
 `compile` is just a shell script, so you can use any valid `bash` code. Keep in mind you'll have
@@ -109,8 +99,9 @@ access to your `node_modules` and `mix`. This means that if you're using a Node 
 
 ```bash
 # app_root/compile
-gulp build:dist
-mix phoenix.digest
+cd $phoenix_dir
+npm --prefix ./assets run build
+mix "${phoenix_ex}.digest" #use the ${phoenix_ex} variable instead of hardcoding phx or phoenix
 ```
 
 The above `compile` overrides the default one. :)

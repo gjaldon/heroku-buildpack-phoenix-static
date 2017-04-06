@@ -159,6 +159,8 @@ run_compile() {
 
   cd $phoenix_dir
 
+  [[ -d priv/static ]] || mkdir -p priv/static
+
   has_clean=$(mix help "${phoenix_ex}.digest.clean" 1>/dev/null 2>&1; echo $?)
 
   if [ $has_clean = 0 ]; then

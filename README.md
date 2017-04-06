@@ -66,9 +66,6 @@ clean_cache=false
 # We can change the filename for the compile script with this option
 compile="compile"
 
-# Add the config vars you want to be exported here
-config_vars_to_export=(DATABASE_URL)
-
 # We can set the version of Node to use for the app here
 node_version=5.3.0
 

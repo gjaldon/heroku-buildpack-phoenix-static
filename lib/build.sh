@@ -164,6 +164,7 @@ run_compile() {
   if [ $has_clean = 0 ]; then
     mkdir -p $cache_dir/phoenix-static
     info "Restoring cached assets"
+    mkdir -p priv
     rsync -a -v --ignore-existing $cache_dir/phoenix-static/ priv/static
   fi
 

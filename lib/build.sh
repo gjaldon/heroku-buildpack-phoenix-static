@@ -20,11 +20,19 @@ load_previous_npm_node_versions() {
 }
 
 download_node() {
-  local node_url="http://s3pository.heroku.com/node/v$node_version/node-v$node_version-linux-x64.tar.gz"
+  local platform=linux-x64
 
   if [ ! -f ${cached_node} ]; then
-    info "Downloading node ${node_version}..."
-    curl -s ${node_url} -o ${cached_node}
+    echo "Resolving node version $node_version..."
+    if ! read number url < <(curl --silent --get --retry 5 --retry-max-time 15 --data-urlencode "range=$node_version" "https://nodebin.herokai.com/v1/node/$platform/latest.txt"); then
+      fail_bin_install node $node_version;
+    fi
+
+    echo "Downloading and installing node $number..."
+    local code=$(curl "$url" -L --silent --fail --retry 5 --retry-max-time 15 -o ${cached_node} --write-out "%{http_code}")
+    if [ "$code" != "200" ]; then
+      echo "Unable to download node: $code" && false
+    fi
   else
     info "Using cached node ${node_version}..."
   fi

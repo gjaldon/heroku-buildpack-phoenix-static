@@ -22,6 +22,9 @@ heroku_dir=$build_dir/.heroku
 source ${build_pack_dir}/lib/common.sh
 source ${build_pack_dir}/lib/build.sh
 
+os=$(get_os)
+JQ="$build_pack_dir/vendor/jq-$os"
+
 
 head "Loading configuration and environment"
 load_previous_npm_node_versions

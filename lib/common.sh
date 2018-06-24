@@ -92,3 +92,7 @@ export_mix_env() {
 
   info "* MIX_ENV=${MIX_ENV}"
 }
+
+get_os() {
+  uname | tr A-Z a-z
+}

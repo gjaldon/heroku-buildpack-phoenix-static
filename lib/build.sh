@@ -116,6 +116,7 @@ install_and_cache_deps() {
     cp -r $cache_dir/node_modules/* node_modules/
   fi
 
+  run_if_present 'heroku-prebuild'
   if [ -f "$assets_dir/yarn.lock" ]; then
     install_yarn_deps
   else
@@ -125,6 +126,31 @@ install_and_cache_deps() {
   cp -r node_modules $cache_dir
   PATH=$assets_dir/node_modules/.bin:$PATH
   install_bower_deps
+  run_if_present 'heroku-postbuild'
+}
+
+run_if_present() {
+  local script_name=${1:-}
+  local has_script=$(read_json "$assets_dir/package.json" ".scripts[\"$script_name\"]")
+  if [ -n "$has_script" ]; then
+    if [ -f "$assets_dir/yarn.lock" ]; then
+      echo "Running $script_name (yarn)"
+      yarn run "$script_name"
+    else
+      echo "Running $script_name"
+      npm run "$script_name" --if-present
+    fi
+  fi
+}
+
+read_json() {
+  local file=$1
+  local key=$2
+  if test -f $file; then
+    cat $file | $JQ --raw-output "$key // \"\"" || return 1
+  else
+    echo ""
+  fi
 }
 
 install_npm_deps() {

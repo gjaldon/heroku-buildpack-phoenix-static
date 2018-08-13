@@ -1,4 +1,4 @@
-brunch build --production
+npm run deploy
 
 cd $phoenix_dir
 

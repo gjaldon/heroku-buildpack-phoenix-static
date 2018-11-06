@@ -9,7 +9,7 @@ This buildpack is meant to be used with the [Heroku Buildpack for Elixir](https:
 * Works much like the [Heroku Buildpack for Elixir](https://github.com/HashNuke/heroku-buildpack-elixir)!
 * **Easy configuration** with `phoenix_static_buildpack.config` file
 * Automatically sets `DATABASE_URL`
-* If your app doesn't have a Procfile, default web task `mix phoenix.server` will be run
+* If your app doesn't have a Procfile, default web task `mix phx.server` will be run
 * Can configure versions for Node and NPM
 * Auto-installs Bower deps if `bower.json` is in your app's root path
 * Caches Node, NPM modules and Bower components

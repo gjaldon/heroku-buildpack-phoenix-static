@@ -124,6 +124,7 @@ install_and_cache_deps() {
 
   cp -r node_modules $cache_dir
   PATH=$assets_dir/node_modules/.bin:$PATH
+  info "Exit Installing"
   install_bower_deps
 }
 

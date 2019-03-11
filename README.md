@@ -84,13 +84,13 @@ remove_node=false
 # We can change path that npm dependencies are in relation to phoenix app. E.g. assets for phoenix 1.3 support.
 assets_path=.
 
-# We can change phoenix mix namespace tasks. E.g. phx for phoenix 1.3 support.
-phoenix_ex=phoenix
+# We can change phoenix mix namespace tasks. E.g. `phoenix` for phoenix < 1.3 support.
+phoenix_ex=phx
 ```
 
 ## Compile
 
-By default, Phoenix uses `brunch` and recommends you to use `mix phoenix.digest` in production. For that, we have a default `compile` shell script which gets run after building dependencies and
+By default, Phoenix uses `brunch` and recommends you to use `mix phx.digest` in production. For that, we have a default `compile` shell script which gets run after building dependencies and
 just before finalizing the build. The `compile` file [looks like this](https://github.com/gjaldon/heroku-buildpack-phoenix-static/blob/master/compile).
 
 To customize your app's compile hook, just add a `compile` file to your app's root directory.
@@ -114,9 +114,9 @@ The above `compile` overrides the default one. :)
 
 2. Do I need `heroku-buildpack-nodejs` with this?
 - No, this buildpack installs Node for you. How it differs from the NodeJS buildpack
-is that it adds `mix` to the PATH so you can run `mix` commands like `mix phoenix.digest`.
+is that it adds `mix` to the PATH so you can run `mix` commands like `mix phx.digest`.
 
-3. I am getting an error `Command "deploy" not found.` even though my previous deploys used to work. How to fix? 
+3. I am getting an error `Command "deploy" not found.` even though my previous deploys used to work. How to fix?
 - The default `compile` file, which are a set of commands ran during the buildpack's compile hook, was replaced to be compatible with Phoenix versions 1.4 and above. If using brunch and older versions of Phoenix, you will need to add a custom `compile` in your app's root directory that looks like:
 
 ```bash

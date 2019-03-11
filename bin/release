@@ -5,5 +5,5 @@ cat <<EOF
 addons:
   []
 default_process_types:
-  web: mix phx.server
+  web: mix ${phoenix_ex}.server
 EOF

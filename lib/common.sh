@@ -66,6 +66,9 @@ load_config() {
 
   assets_dir=$phoenix_dir/$assets_path
 
+  # save this value for bin/release
+  echo "phoenix_ex=${phoenix_ex}" > $build_dir/PHOENIX_EX_VAR
+
   info "Will use phoenix configuration:"
   info "* assets path ${assets_path}"
   info "* mix tasks namespace ${phoenix_ex}"

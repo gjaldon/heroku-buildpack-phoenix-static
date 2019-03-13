@@ -2,17 +2,12 @@
 # bin/release <build-dir>
 
 export BUILD_DIR=$1
+source $BUILD_DIR/PHOENIX_EX_VAR
 
 cat <<EOF
 ---
 addons:
   []
 default_process_types:
+  web: mix ${phoenix_ex}.server
 EOF
-
-if [ -f $BUILD_DIR/PHOENIX_EX_VAR ]; then
-  source $BUILD_DIR/PHOENIX_EX_VAR
-  echo "  web: mix ${phoenix_ex}.server"
-else
-  echo "  web: mix phx.server"
-fi

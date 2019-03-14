@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
+# bin/release <build-dir>
 
-build_pack_dir=$(cd $(dirname $(dirname $0)); pwd)
-
-source ${build_pack_dir}/lib/common.sh
-
-head "Loading config in bin/release"
-load_config
+export BUILD_DIR=$1
+source $BUILD_DIR/PHOENIX_EX_VAR
 
 cat <<EOF
 ---

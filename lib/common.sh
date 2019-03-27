@@ -33,7 +33,7 @@ load_config() {
   if [ -f $custom_config_file ]; then
     source $custom_config_file
   else
-    info "WARNING: phoenix_static_buildpack.config wasn't found in the app"
+    info "phoenix_static_buildpack.config wasn't found in the app"
     info "Using default config from Phoenix static buildpack"
   fi
 

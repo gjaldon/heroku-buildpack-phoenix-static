@@ -142,8 +142,9 @@ install_npm_deps() {
     info "Adding npm registry entry to .npmrc using environment variable NPM_TOKEN"
     echo "//registry.npmjs.org/:_authToken=${npm_token}" >> "${build_dir}/.npmrc"
   fi
-  npm prune --userconfig $build_dir/.npmrc
-  npm install --unsafe-perm --userconfig $build_dir/.npmrc 2>&1 | indent
+  
+  npm prune --userconfig $build_dir/.npmrc | indent
+  npm install --quiet --unsafe-perm --userconfig $build_dir/.npmrc 2>&1 | indent
   npm rebuild 2>&1 | indent
   npm --unsafe-perm prune 2>&1 | indent
 }

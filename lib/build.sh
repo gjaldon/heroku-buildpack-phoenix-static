@@ -6,6 +6,7 @@ cleanup_cache() {
     rm -rf $cache_dir/node-version
     rm -rf $cache_dir/phoenix-static
     rm -rf $cache_dir/yarn-cache
+    rm -rf $cache_dir/node_modules
     cleanup_old_node
   fi
 }
@@ -45,9 +46,8 @@ cleanup_old_node() {
   # has the format "5.6.0"
 
   if [ $clean_cache = true ] || [ $old_node != v$node_version ] && [ -f $old_node_dir ]; then
-    info "Cleaning up old Node $old_node and old dependencies in cache"
+    info "Cleaning up old Node $old_node"
     rm $old_node_dir
-    rm -rf $cache_dir/node_modules
 
     local bower_components_dir=$cache_dir/bower_components
 
@@ -115,8 +115,6 @@ install_yarn() {
 }
 
 install_and_cache_deps() {
-  info "Installing and caching node modules"
-
   cd $assets_dir
 
   if [ -d $cache_dir/node_modules ]; then
@@ -125,6 +123,7 @@ install_and_cache_deps() {
     cp -R $cache_dir/node_modules/* node_modules/
   fi
 
+  info "Installing node modules"
   if [ -f "$assets_dir/yarn.lock" ]; then
     install_yarn_deps
   else

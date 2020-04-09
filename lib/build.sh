@@ -1,3 +1,5 @@
+
+ 
 cleanup_cache() {
   if [ $clean_cache = true ]; then
     info "clean_cache option set to true."
@@ -139,8 +141,15 @@ install_and_cache_deps() {
 }
 
 install_npm_deps() {
-  npm prune | indent
-  npm install --quiet --unsafe-perm --userconfig $build_dir/npmrc 2>&1 | indent
+  npm_token="${NPM_TOKEN:-$(cat $env_dir/NPM_TOKEN)}"
+
+  if [ "$npm_token" != "" ]; then
+    info "Adding npm registry entry to .npmrc using environment variable NPM_TOKEN"
+    echo "//registry.npmjs.org/:_authToken=${npm_token}" >> "${build_dir}/.npmrc"
+  fi
+  
+  npm prune --userconfig $build_dir/.npmrc | indent
+  npm install --quiet --unsafe-perm --userconfig $build_dir/.npmrc 2>&1 | indent
   npm rebuild 2>&1 | indent
   npm --unsafe-perm prune 2>&1 | indent
 }

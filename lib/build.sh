@@ -6,6 +6,7 @@ cleanup_cache() {
     rm -rf $cache_dir/node-version
     rm -rf $cache_dir/phoenix-static
     rm -rf $cache_dir/yarn-cache
+    rm -rf $cache_dir/node_modules
     cleanup_old_node
   fi
 }
@@ -45,9 +46,8 @@ cleanup_old_node() {
   # has the format "5.6.0"
 
   if [ $clean_cache = true ] || [ $old_node != v$node_version ] && [ -f $old_node_dir ]; then
-    info "Cleaning up old Node $old_node and old dependencies in cache"
+    info "Cleaning up old Node $old_node"
     rm $old_node_dir
-    rm -rf $cache_dir/node_modules
 
     local bower_components_dir=$cache_dir/bower_components
 
@@ -78,7 +78,7 @@ install_node() {
 install_npm() {
   # Optionally bootstrap a different npm version
   if [ ! $npm_version ] || [[ `npm --version` == "$npm_version" ]]; then
-    info "Using default npm version"
+    info "Using default npm version `npm --version`"
   else
     info "Downloading and installing npm $npm_version (replacing version `npm --version`)..."
     cd $build_dir
@@ -115,21 +115,26 @@ install_yarn() {
 }
 
 install_and_cache_deps() {
-  info "Installing and caching node modules"
   cd $assets_dir
+
   if [ -d $cache_dir/node_modules ]; then
-    mkdir -p node_modules
-    cp -r $cache_dir/node_modules/* node_modules/
+    info "Loading node modules from cache"
+    mkdir node_modules
+    cp -R $cache_dir/node_modules/* node_modules/
   fi
 
+  info "Installing node modules"
   if [ -f "$assets_dir/yarn.lock" ]; then
     install_yarn_deps
   else
     install_npm_deps
   fi
 
-  cp -r node_modules $cache_dir
+  info "Caching node modules"
+  cp -R node_modules $cache_dir
+
   PATH=$assets_dir/node_modules/.bin:$PATH
+
   install_bower_deps
 }
 

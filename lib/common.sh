@@ -30,6 +30,8 @@ load_config() {
   # Source for default versions file from buildpack first
   source "${build_pack_dir}/phoenix_static_buildpack.config"
 
+  echo "$node_version"
+  echo "$npm_version"
   fix_node_version
   fix_npm_version
 

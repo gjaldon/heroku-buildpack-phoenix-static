@@ -30,17 +30,15 @@ load_config() {
   # Source for default versions file from buildpack first
   source "${build_pack_dir}/phoenix_static_buildpack.config"
 
-  echo "$node_version"
-  echo "$npm_version"
-  fix_node_version
-  fix_npm_version
-
   if [ -f $custom_config_file ]; then
     source $custom_config_file
   else
     info "The config file phoenix_static_buildpack.config wasn't found"
     info "Using the default config provided from the Phoenix static buildpack"
   fi
+
+  fix_node_version
+  fix_npm_version
 
   phoenix_dir=$build_dir/$phoenix_relative_path
 
@@ -99,15 +97,9 @@ export_mix_env() {
 }
 
 fix_node_version() {
-  echo "node_version"
-  echo "${node_version}"
   node_version=$(echo "${node_version}" | sed 's/[^0-9.]*//g')
-  echo "${node_version}"
 }
 
 fix_npm_version() {
-  echo "npm_version"
-  echo "${npm_version}"
   npm_version=$(echo "${npm_version}" | sed 's/[^0-9.]*//g')
-  echo "${npm_version}"
 }

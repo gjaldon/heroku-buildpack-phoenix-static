@@ -98,14 +98,14 @@ export_mix_env() {
 
 fix_node_version() {
   echo "node_version"
-  echo "$node_version"
-  node_version=$(echo "$node_version" | sed 's/[^0-9.]*//g')
-  echo "$node_version"
+  echo "${node_version}"
+  node_version=$(echo "${node_version}" | sed 's/[^0-9.]*//g')
+  echo "${node_version}"
 }
 
 fix_npm_version() {
   echo "npm_version"
-  echo "$npm_version"
-  npm_version=$(echo "$npm_version" | sed 's/[^0-9.]*//g')
-  echo "$npm_version"
+  echo "${npm_version}"
+  npm_version=$(echo "${npm_version}" | sed 's/[^0-9.]*//g')
+  echo "${npm_version}"
 }

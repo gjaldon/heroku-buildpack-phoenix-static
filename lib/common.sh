@@ -37,6 +37,9 @@ load_config() {
     info "Using the default config provided from the Phoenix static buildpack"
   fi
 
+  fix_node_version
+  fix_npm_version
+
   phoenix_dir=$build_dir/$phoenix_relative_path
 
   info "Detecting assets directory"
@@ -91,4 +94,12 @@ export_mix_env() {
   fi
 
   info "* MIX_ENV=${MIX_ENV}"
+}
+
+fix_node_version() {
+  node_version=$(echo "${node_version}" | sed 's/[^0-9.]*//g')
+}
+
+fix_npm_version() {
+  npm_version=$(echo "${npm_version}" | sed 's/[^0-9.]*//g')
 }

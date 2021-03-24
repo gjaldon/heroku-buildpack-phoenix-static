@@ -1,4 +1,4 @@
-if [ -f "$assets_dir/yarn.lock" ]; then
+if [ -f "$assets_dir/yarn.lock" ] || [ -d "$assets_dir/.yarn" ] || [ -f "$assets_dir/.pnp.*" ]; then
   yarn deploy
 else
   npm run deploy

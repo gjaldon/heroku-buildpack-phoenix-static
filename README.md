@@ -67,22 +67,16 @@ clean_cache=false
 compile="compile"
 
 # We can set the version of Node to use for the app here
-node_version=5.3.0
+node_version=10.15.1
 
 # We can set the version of NPM to use for the app here
-npm_version=2.10.1
+npm_version=6.4.1
 
 # We can set the version of Yarn to use for the app here
 yarn_version=1.13.0
 
-# We can set the path to phoenix app. E.g. apps/phoenix_app when in umbrella.
-phoenix_relative_path=.
-
 # Remove node and node_modules directory to keep slug size down if it is not needed.
 remove_node=false
-
-# We can change path that npm dependencies are in relation to phoenix app. E.g. assets for phoenix 1.3 support.
-assets_path=.
 
 # We can change phoenix mix namespace tasks. E.g. `phoenix` for phoenix < 1.3 support.
 phoenix_ex=phx
@@ -99,13 +93,58 @@ access to your `node_modules` and `mix`. This means that if you're using a Node 
 
 ```bash
 # app_root/compile
+phoenix_dir=$build_dir
+assets_dir=$build_dir/assets
+info "Phoenix dir ${phoenix_dir}"
+
+cd $assets_dir
+install_and_cache_node_modules
+npm run build # custom command example
+remove_assets_node_modules
+
 cd $phoenix_dir
-npm --prefix ./assets run build
-mix "${phoenix_ex}.digest" #use the ${phoenix_ex} variable instead of hardcoding phx or phoenix
+mix "phx.digest"
+mix "phx.digest.clean"
 ```
 
 The above `compile` overrides the default one. :)
 
+## Umbrella
+
+To work with umbrella just set up the correct paths in your modified `compile` script. You can even repeat the commands for multiple umbrella apps in the same repo.
+The limitation is that they proces will use the same tool versions for all of them. (node, npm, yarn, bower)
+
+```bash
+# app_root/compile
+
+# Build first umbrella app
+phoenix_dir=$build_dir/apps/first_app_web
+assets_dir=$build_dir/assets
+info "Phoenix dir ${phoenix_dir}"
+
+cd $assets_dir
+install_and_cache_node_modules
+npm run deploy
+remove_assets_node_modules
+
+cd $phoenix_dir
+mix "phx.digest"
+mix "phx.digest.clean"
+
+# Build second second app
+phoenix_dir=$build_dir/apps/second_app_web
+assets_dir=$build_dir/assets
+info "Phoenix dir ${phoenix_dir}"
+
+cd $assets_dir
+install_and_cache_node_modules
+npm run deploy
+remove_assets_node_modules
+
+cd $phoenix_dir
+mix "phx.digest"
+mix "phx.digest.clean"
+```
 
 ## FAQ
 

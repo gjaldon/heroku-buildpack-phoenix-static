@@ -1,13 +1,16 @@
+info "Phoenix dir ${phoenix_dir}"
+phoenix_dir=$build_dir
+assets_dir=$build_dir/assets
+
+cd $assets_dir
+install_and_cache_node_modules
 if [ -f "$assets_dir/yarn.lock" ]; then
   yarn deploy
 else
   npm run deploy
 fi
+remove_assets_node_modules
 
 cd $phoenix_dir
-
-mix "${phoenix_ex}.digest"
-
-if mix help "${phoenix_ex}.digest.clean" 1>/dev/null 2>&1; then
-  mix "${phoenix_ex}.digest.clean"
-fi
+mix "phx.digest"
+mix "phx.digest.clean"

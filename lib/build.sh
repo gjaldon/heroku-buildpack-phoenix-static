@@ -6,7 +6,7 @@ cleanup_cache() {
     rm -rf $cache_dir/node-version
     rm -rf $cache_dir/phoenix-static
     rm -rf $cache_dir/yarn-cache
-    rm -rf $cache_dir/node_modules
+    rm -rf $cache_dir/apps
     cleanup_old_node
   fi
 }
@@ -87,66 +87,88 @@ install_npm() {
 }
 
 install_yarn() {
-  local dir="$1"
+  if [ -f "$assets_dir/yarn.lock" ]; then
+    local dir="$1"
 
-  if [ ! $yarn_version ]; then
-    echo "Downloading and installing yarn lastest..."
-    local download_url="https://yarnpkg.com/latest.tar.gz"
-  else
-    echo "Downloading and installing yarn $yarn_version..."
-    local download_url="https://yarnpkg.com/downloads/$yarn_version/yarn-v$yarn_version.tar.gz"
-  fi
+    if [ ! $yarn_version ]; then
+      echo "Downloading and installing yarn lastest..."
+      local download_url="https://yarnpkg.com/latest.tar.gz"
+    else
+      echo "Downloading and installing yarn $yarn_version..."
+      local download_url="https://yarnpkg.com/downloads/$yarn_version/yarn-v$yarn_version.tar.gz"
+    fi
 
-  local code=$(curl "$download_url" -L --silent --fail --retry 5 --retry-max-time 15 -o /tmp/yarn.tar.gz --write-out "%{http_code}")
-  if [ "$code" != "200" ]; then
-    echo "Unable to download yarn: $code" && false
+    local code=$(curl "$download_url" -L --silent --fail --retry 5 --retry-max-time 15 -o /tmp/yarn.tar.gz --write-out "%{http_code}")
+    if [ "$code" != "200" ]; then
+      echo "Unable to download yarn: $code" && false
+    fi
+    rm -rf $dir
+    mkdir -p "$dir"
+    # https://github.com/yarnpkg/yarn/issues/770
+    if tar --version | grep -q 'gnu'; then
+      tar xzf /tmp/yarn.tar.gz -C "$dir" --strip 1 --warning=no-unknown-keyword
+    else
+      tar xzf /tmp/yarn.tar.gz -C "$dir" --strip 1
+    fi
+    chmod +x $dir/bin/*
+    PATH=$dir/bin:$PATH
+    echo "Installed yarn $(yarn --version)"
   fi
-  rm -rf $dir
-  mkdir -p "$dir"
-  # https://github.com/yarnpkg/yarn/issues/770
-  if tar --version | grep -q 'gnu'; then
-    tar xzf /tmp/yarn.tar.gz -C "$dir" --strip 1 --warning=no-unknown-keyword
-  else
-    tar xzf /tmp/yarn.tar.gz -C "$dir" --strip 1
-  fi
-  chmod +x $dir/bin/*
-  PATH=$dir/bin:$PATH
-  echo "Installed yarn $(yarn --version)"
 }
 
-install_and_cache_deps() {
-  cd $assets_dir
+setup_app_cache_dir() {
+  local app_dir_name=$(basename $phoenix_dir)
+  app_cache_dir=$cache_dir/apps/$app_dir_name
+  mkdir -p $app_cache_dir
+}
 
-  if [ -d $cache_dir/node_modules ]; then
+install_and_cache_node_modules() {
+  setup_app_cache_dir
+
+  if [ -d $app_cache_dir/node_modules ]; then
     info "Loading node modules from cache"
-    mkdir node_modules
-    cp -R $cache_dir/node_modules/* node_modules/
+    info "cp -R $app_cache_dir/node_modules/* node_modules/"
+    cp -R $app_cache_dir/node_modules/* node_modules/
   fi
 
-  info "Installing node modules"
-  if [ -f "$assets_dir/yarn.lock" ]; then
-    install_yarn_deps
-  else
-    install_npm_deps
-  fi
+  install_yarn_deps
+  install_npm_deps
 
   info "Caching node modules"
-  cp -R node_modules $cache_dir
+  cp -R node_modules $app_cache_dir/
 
-  PATH=$assets_dir/node_modules/.bin:$PATH
+  add_node_modules_bin_to_path
 
   install_bower_deps
 }
 
+add_node_modules_bin_to_path() {
+  PATH=$assets_dir/node_modules/.bin:$PATH
+}
+
 install_npm_deps() {
-  npm prune | indent
-  npm install --quiet --unsafe-perm --userconfig $build_dir/npmrc 2>&1 | indent
-  npm rebuild 2>&1 | indent
-  npm --unsafe-perm prune 2>&1 | indent
+  if [ -f "$assets_dir/yarn.lock" ]; then
+    info "npm avoided, yarn available"
+  else
+    info "Installing node modules with npm"
+    info "npm prune | indent"
+    npm prune | indent
+    info "npm install --quiet --unsafe-perm --userconfig $build_dir/npmrc 2>&1 | indent"
+    npm install --quiet --unsafe-perm --userconfig $build_dir/npmrc 2>&1 | indent
+    if [ $clean_cache = true ] || [ $old_node != v$node_version ] && [ -f $old_node_dir ]; then
+      info "npm rebuild 2>&1 | indent"
+      npm rebuild 2>&1 | indent
+    fi
+    info "npm --unsafe-perm prune 2>&1 | indent"
+    npm --unsafe-perm prune 2>&1 | indent
+  fi
 }
 
 install_yarn_deps() {
-  yarn install --check-files --cache-folder $cache_dir/yarn-cache --pure-lockfile 2>&1
+  if [ -f "$assets_dir/yarn.lock" ]; then
+    info "Installing node modules yarn"
+    yarn install --check-files --cache-folder $cache_dir/yarn-cache --pure-lockfile 2>&1
+  fi
 }
 
 install_bower_deps() {
@@ -181,10 +203,10 @@ run_compile() {
   has_clean=$(mix help "${phoenix_ex}.digest.clean" 1>/dev/null 2>&1; echo $?)
 
   if [ $has_clean = 0 ]; then
-    mkdir -p $cache_dir/phoenix-static
+    mkdir -p $app_cache_dir/phoenix-static
     info "Restoring cached assets"
     mkdir -p priv
-    rsync -a -v --ignore-existing $cache_dir/phoenix-static/ priv/static
+    rsync -a -v --ignore-existing $app_cache_dir/phoenix-static/ priv/static
   fi
 
   cd $assets_dir
@@ -201,8 +223,17 @@ run_compile() {
 
   if [ $has_clean = 0 ]; then
     info "Caching assets"
-    rsync -a --delete -v priv/static/ $cache_dir/phoenix-static
+    rsync -a --delete -v priv/static/ $app_cache_dir/phoenix-static
   fi
+}
+
+remove_assets_node_modules_from_path() {
+  export PATH=$(p=$(echo $PATH | tr ":" "\n" | grep -v "/$assets_dir/node_modules/.bin" | tr "\n" ":"); echo ${p%:})
+}
+
+remove_assets_node_modules() {
+  remove_assets_node_modules_from_path
+  rm -rf $assets_dir/node_modules
 }
 
 cache_versions() {
@@ -222,12 +253,11 @@ finalize_node() {
 write_profile() {
   info "Creating runtime environment"
   mkdir -p $build_dir/.profile.d
-  local export_line="export PATH=\"\$HOME/.heroku/node/bin:\$HOME/.heroku/yarn/bin:\$HOME/bin:\$HOME/$phoenix_relative_path/node_modules/.bin:\$PATH\""
+  local export_line="export PATH=\"\$HOME/.heroku/node/bin:\$HOME/.heroku/yarn/bin:\$HOME/bin:\$HOME/$assets_dir/node_modules/.bin:\$PATH\""
   echo $export_line >> $build_dir/.profile.d/phoenix_static_buildpack_paths.sh
 }
 
 remove_node() {
   info "Removing node and node_modules"
-  rm -rf $assets_dir/node_modules
   rm -rf $heroku_dir/node
 }

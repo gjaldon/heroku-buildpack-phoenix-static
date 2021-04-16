@@ -14,9 +14,9 @@ unset GIT_DIR     # Avoid GIT_DIR leak from previous build steps
 
 mkdir -p $1 $2 $3 # Ensure dirs are present
 
-build_dir=$(cd $1 && pwd)
-cache_dir=$(cd $2 && pwd)
-env_dir=$(cd $3 && pwd)
+build_dir=$(cd $1 && pwd) # _build
+cache_dir=$(cd $2 && pwd) # gigalixir/cache
+env_dir=$(cd $3 && pwd)   # env vars related
 heroku_dir=$build_dir/.heroku
 
 source ${build_pack_dir}/lib/common.sh
@@ -36,13 +36,9 @@ cleanup_cache
 download_node
 install_node
 install_npm
-if [ -f "$assets_dir/yarn.lock" ]; then
-  install_yarn "$heroku_dir/yarn"
-fi
+install_yarn "$heroku_dir/yarn"
 
 head "Building dependencies"
-install_and_cache_deps
-
 compile
 
 head "Finalizing build"

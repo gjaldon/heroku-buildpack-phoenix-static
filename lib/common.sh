@@ -40,33 +40,6 @@ load_config() {
   fix_node_version
   fix_npm_version
 
-  phoenix_dir=$build_dir/$phoenix_relative_path
-
-  info "Detecting assets directory"
-  if [ -f "$phoenix_dir/$assets_path/package.json" ]; then
-    # Check phoenix custom sub-directory for package.json
-    info "* package.json found in custom directory"
-  elif [ -f "$phoenix_dir/package.json" ]; then
-    # Check phoenix root directory for package.json, phoenix 1.2.x and prior
-    info "WARNING: package.json detected in root "
-    info "* assuming phoenix 1.2.x or prior, please check config file"
-
-    assets_path=.
-    phoenix_ex=phoenix
-  else
-    # Check phoenix custom sub-directory for package.json, phoenix 1.3.x and later
-    info "WARNING: no package.json detected in root nor custom directory"
-    info "* assuming phoenix 1.3.x and later, please check config file"
-
-    assets_path=assets
-    phoenix_ex=phx
-  fi
-
-  assets_dir=$phoenix_dir/$assets_path
-  info "Will use phoenix configuration:"
-  info "* assets path ${assets_path}"
-  info "* mix tasks namespace ${phoenix_ex}"
-
   info "Will use the following versions:"
   info "* Node ${node_version}"
 }
@@ -102,4 +75,9 @@ fix_node_version() {
 
 fix_npm_version() {
   npm_version=$(echo "${npm_version}" | sed 's/[^0-9.]*//g')
+}
+
+function path_remove {
+  PATH=${PATH/":$1"/} # delete any instances in the middle or at the end
+  PATH=${PATH/"$1:"/} # delete any instances at the beginning
 }

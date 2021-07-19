@@ -25,19 +25,18 @@ file_contents() {
 load_config() {
   info "Loading config..."
 
-  local custom_config_filename="phoenix_static_buildpack.config"
-
-  if [ -n "$CI" ] && [ -f "${build_dir}/phoenix_static_buildpack.test.config" ]; then
-    custom_config_filename="phoenix_static_buildpack.test.config"
-  fi
-
-  local custom_config_file="${build_dir}/${custom_config_filename}"
+  local custom_config_file="${build_dir}/phoenix_static_buildpack.config"
 
   # Source for default versions file from buildpack first
   source "${build_pack_dir}/phoenix_static_buildpack.config"
 
   if [ -f $custom_config_file ]; then
     source $custom_config_file
+
+    # Source test config if running on Heroku CI
+    if [ -n "$CI" ] && [ -f "${build_dir}/phoenix_static_buildpack.test.config" ]; then
+      source "${build_dir}/phoenix_static_buildpack.test.config"
+    fi
   else
     info "The config file phoenix_static_buildpack.config wasn't found"
     info "Using the default config provided from the Phoenix static buildpack"

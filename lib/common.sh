@@ -25,7 +25,13 @@ file_contents() {
 load_config() {
   info "Loading config..."
 
-  local custom_config_file="${build_dir}/phoenix_static_buildpack.config"
+  local custom_config_filename="phoenix_static_buildpack.config"
+
+  if [ -n "$CI" ] && [ -f "${build_dir}/phoenix_static_buildpack.test.config" ]; then
+    custom_config_filename="phoenix_static_buildpack.test.config"
+  fi
+
+  local custom_config_file="${build_dir}/${custom_config_filename}"
 
   # Source for default versions file from buildpack first
   source "${build_pack_dir}/phoenix_static_buildpack.config"

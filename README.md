@@ -88,6 +88,10 @@ assets_path=.
 phoenix_ex=phx
 ```
 
+### Heroku CI
+
+Additionally, you can create a `phoenix_static_buildpack.test.config` file that is specific for Heroku CI runs. Once defined, it will override the `phoenix_static_buildpack.config` values.
+
 ## Compile
 
 By default, Phoenix uses `brunch` and recommends you to use `mix phx.digest` in production. For that, we have a default `compile` shell script which gets run after building dependencies and

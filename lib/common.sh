@@ -34,7 +34,7 @@ load_config() {
     source $custom_config_file
 
     # Source test config if running on Heroku CI
-    if [ -n "$CI" ] && [ -f "${build_dir}/phoenix_static_buildpack.test.config" ]; then
+    if [ -d $env_dir ] && [ -f $env_dir/CI ] && [ -f "${build_dir}/phoenix_static_buildpack.test.config" ]; then
       info "Loading test config..."
       source "${build_dir}/phoenix_static_buildpack.test.config"
     fi

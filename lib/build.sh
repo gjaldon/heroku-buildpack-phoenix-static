@@ -130,7 +130,7 @@ install_and_cache_deps() {
     install_npm_deps
   fi
 
-  if [ -d node_modules ]; thent
+  if [ -d node_modules ]; then
     info "Caching node modules"
     cp -R node_modules $cache_dir
   fi

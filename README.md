@@ -56,6 +56,7 @@ Create a `phoenix_static_buildpack.config` file in your app's root dir if you wa
 
 If you don't specify a config option, then the default option from the buildpack's [`phoenix_static_buildpack.config`](https://github.com/gjaldon/heroku-buildpack-phoenix-static/blob/master/phoenix_static_buildpack.config) file will be used.
 
+**NOTE:** The versions of Elixir and Erlang listed below and the buildpack's default versions will not reflect the latest released versions and this might cause issues with your build.
 
 __Here's a full config file with all available options:__
 
@@ -67,13 +68,13 @@ clean_cache=false
 compile="compile"
 
 # We can set the version of Node to use for the app here
-node_version=5.3.0
+node_version=6.14.11
 
 # We can set the version of NPM to use for the app here
-npm_version=2.10.1
+npm_version=14.16.0
 
 # We can set the version of Yarn to use for the app here
-yarn_version=1.13.0
+yarn_version=1.22.0
 
 # We can set the path to phoenix app. E.g. apps/phoenix_app when in umbrella.
 phoenix_relative_path=.

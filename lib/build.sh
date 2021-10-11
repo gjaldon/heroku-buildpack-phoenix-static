@@ -89,7 +89,7 @@ install_npm() {
 install_yarn() {
   local dir="$1"
 
-  if [ ! $yarn_version ]; then
+  if [ ! $yarn_version ] || is_yarn2_configured; then
     echo "Downloading and installing yarn lastest..."
     local download_url="https://yarnpkg.com/latest.tar.gz"
   else
@@ -112,6 +112,10 @@ install_yarn() {
   chmod +x $dir/bin/*
   PATH=$dir/bin:$PATH
   echo "Installed yarn $(yarn --version)"
+
+  if is_yarn2_configured; then
+    yarn set version berry
+  fi
 }
 
 install_and_cache_deps() {
@@ -232,4 +236,18 @@ remove_node() {
   info "Removing node and node_modules"
   rm -rf $assets_dir/node_modules
   rm -rf $heroku_dir/node
+}
+
+is_yarn2_configured() {
+  if [ ! $yarn_version ]; then
+    return $(false)
+  else
+    local regex='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
+    local major_version=`echo $yarn_version | sed -e "s#$regex#\1#"`
+    if [ $major_version -ge 2 ]; then
+      return $(true)
+    else
+      return $(false)
+    fi
+  fi
 }

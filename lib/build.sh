@@ -25,7 +25,7 @@ download_node() {
 
   if [ ! -f ${cached_node} ]; then
     echo "Resolving node version $node_version..."
-    if ! read number url < <(curl --silent --get --retry 5 --retry-max-time 15 --data-urlencode "range=$node_version" "https://nodebin.herokai.com/v1/node/$platform/latest.txt"); then
+    if ! read number url < <(curl --silent --get --retry 5 --retry-max-time 15 --data-urlencode "range=$node_version" "https://nodejs.org/dist/v${node_version}/node-v${node_version}-linux-x64.tar.gz"); then
       fail_bin_install node $node_version;
     fi
 
